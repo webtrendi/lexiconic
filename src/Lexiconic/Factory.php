@@ -14,7 +14,7 @@ namespace Lexiconic;
  * @since  2014-04-13
  * @author Patrick Forget <patforg@geekpad.ca>
  */
-static class ExtractorFactory
+class Factory
 {
     /**
      * Holds a reference to all extractors
@@ -36,14 +36,14 @@ static class ExtractorFactory
      * @since  2014-04-13
      * @author Patrick Forget <patforg@geekpad.ca>
      */
-    public static function getExtractorFunction($domain) {
+    public static function getTermFunction($domain) {
         if (!isset(self::$extractors[$domain])) {
-            $this->initDomain($domain);
+            self::initDomain($domain);
         } //if
 
         $extractor = self::$extractors[$domain];
 
-        return ($extractor instanceof Extractor\ExtractorInterface ? $extractor->getExtractorFunction() : null);
+        return ($extractor instanceof Extractor\ExtractorInterface ? $extractor->getTermFunction() : null);
     } // getExtractorFunction()
 
     /**
@@ -52,15 +52,35 @@ static class ExtractorFactory
      * @since  2014-04-13
      * @author Patrick Forget <patforg@geekpad.ca>
      */
-    public static function getPluralExtractorFunction($domain) {
+    public static function getPluralTermFunction($domain) {
         if (!isset(self::$extractors[$domain])) {
-            $this->initDomain($domain);
+            self::initDomain($domain);
         } //if
 
         $extractor = self::$extractors[$domain];
 
-        return ($extractor instanceof Extractor\ExtractorInterface ? $extractor->getPluralExtractorFunction() : null);
+        return ($extractor instanceof Extractor\ExtractorInterface ? $extractor->getPluralTermFunction() : null);
     } // getPluralExtractorFunction()
+
+    /**
+     * Assigns config values
+     *
+     * @since  2014-04-13
+     * @author Patrick Forget <patforg@geekpad.ca>
+     */
+    public static function setConfig($config) {
+        self::$config = $config;
+    } // setConfig()
+
+    /**
+     * Retrieve config values
+     *
+     * @since  2014-04-13
+     * @author Patrick Forget <patforg@geekpad.ca>
+     */
+    public static function getConfig() {
+        return self::$config;
+    } // getConfig()
 
     /**
      * initialize a domain
@@ -73,7 +93,7 @@ static class ExtractorFactory
             return;
         } //if
 
-        $path = isset(self::$config['path']) ? self::$config['path']) : '';
+        $path = isset(self::$config['path']) ? self::$config['path'] : '';
 
         $extractor = new Extractor\GettextExtractor($domain, $path);
 
@@ -85,4 +105,4 @@ static class ExtractorFactory
 
     } // initDomain()
 
-} //  ExtractorFactory class
+} //  Factory class

@@ -35,12 +35,12 @@ class GettextExtractor implements ExtractorInterface
     /**
      * @var Callable
      */
-    private $extractorFunction = null;
+    private $termFunction = null;
 
     /**
      * @var Callable
      */
-    private $pluralExtractorFunction = null;
+    private $pluralTermFunction = null;
 
     /**
      * @var string
@@ -104,24 +104,24 @@ class GettextExtractor implements ExtractorInterface
     /**
      * {@inheritdoc}
      */
-    public function getExtractorFunction() {
+    public function getTermFunction() {
         if (!$this->initialized) {
             $this->init();
         } //if
 
-        return $this->extractorFunction;
+        return $this->termFunction;
     } // getExctractorFunction()
 
     /**
      * {@inheritdoc}
      */
-    public function getPluralExtractorFunction() {
+    public function getPluralTermFunction() {
         
         if (!$this->initialized) {
             $this->init();
         } //if
 
-        return $this->pluralExtractorFunction;
+        return $this->pluralTermFunction;
 
     } // getPluralExtractorFunction()
 
@@ -141,7 +141,7 @@ class GettextExtractor implements ExtractorInterface
         bind_textdomain_codeset($domain, $this->getEncoding());
 
         /* anonymous function that retreives non varying strings (not plural) */
-        $this->extractroFunction = function ($messageKey, $context = null) use ($domain) {
+        $this->termFunction = function ($messageKey, $context = null) use ($domain) {
 
             if ($context === null) {
                 return dgettext($domain, $messageKey);
@@ -153,7 +153,7 @@ class GettextExtractor implements ExtractorInterface
         };
 
         /* anonymous function that retreives the plural form  */
-        $this->pluralExtractorFunction = function ($messageKey, $pluralKey, $number, $context = null) use ($domain) {
+        $this->pluralTermFunction = function ($messageKey, $pluralKey, $number, $context = null) use ($domain) {
 
             if ($context === null) {
                 return dngettext($domain, $messageKey, $pluralKey, $number);

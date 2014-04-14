@@ -27,7 +27,7 @@ interface ExtractorInterface
      *     first param takes the string in its original language
      *     second param is optional and takes the context of the string
      */
-    public function getExtractorFunction();
+    public function getTermFunction();
 
 
     /**
@@ -42,6 +42,6 @@ interface ExtractorInterface
      *     third param takes the the number of items related to the string
      *     fourth param is optional and takes the context of the string
      */
-    public function getPluralExtractorFunction();
+    public function getPluralTermFunction();
 
 } // ExtractorInterface interface
