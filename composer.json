@@ -1,0 +1,21 @@
+{
+    "name": "webtrendi/lexiconic",
+    "description": "Utility and classes to facilitate gettext style translations in PHP",
+    "keywords": ["internationalization","localization", "gettext", "translation"],
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Patrick Forget",
+            "email": "patforg@webtrendi.com",
+            "homepage": "http://webtrendi.com",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-0": {"Clapp\\": "src/"}
+    },
+    "require": {
+        "php": ">=5.3.0"
+    }
+}
