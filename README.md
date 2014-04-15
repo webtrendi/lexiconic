@@ -44,7 +44,7 @@ Features
 --------
 * Supports context in strings
 * Abstracts the gettex library to support other methods
-* Does not invate global scope
+* Does not invade global scope
  
 To Do
 -----
