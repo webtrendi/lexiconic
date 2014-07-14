@@ -16,12 +16,6 @@ namespace Lexiconic;
  */
 class Factory
 {
-    /**
-     * Holds a reference to all extractors
-     * 
-     * @var array
-     */
-    private static $extractors = array();
 
     /**
      * Holds configuration to use for extractors
@@ -36,12 +30,9 @@ class Factory
      * @since  2014-04-13
      * @author Patrick Forget <patforg@geekpad.ca>
      */
-    public static function getTermFunction($domain) {
-        if (!isset(self::$extractors[$domain])) {
-            self::initDomain($domain);
-        } //if
+    public static function getTermFunction($domain, $options = array()) {
 
-        $extractor = self::$extractors[$domain];
+        $extractor = self::getExtractor($domain, $options);
 
         return ($extractor instanceof Extractor\ExtractorInterface ? $extractor->getTermFunction() : null);
     } // getExtractorFunction()
@@ -52,12 +43,9 @@ class Factory
      * @since  2014-04-13
      * @author Patrick Forget <patforg@geekpad.ca>
      */
-    public static function getPluralTermFunction($domain) {
-        if (!isset(self::$extractors[$domain])) {
-            self::initDomain($domain);
-        } //if
-
-        $extractor = self::$extractors[$domain];
+    public static function getPluralTermFunction($domain, $options = array()) {
+        
+        $extractor = self::getExtractor($domain, $options);
 
         return ($extractor instanceof Extractor\ExtractorInterface ? $extractor->getPluralTermFunction() : null);
     } // getPluralExtractorFunction()
@@ -88,20 +76,28 @@ class Factory
      * @since  2014-04-13
      * @author Patrick Forget <patforg@geekpad.ca>
      */
-    private static function initDomain($domain) {
-        if (isset(self::$extractors[$domain])) {
-            return;
+    private static function getExtractor($domain, $options = array()) {
+
+        static $extractors = array();
+
+        $scope = isset($options['scope']) ? $options['scope'] : 'app';
+
+        $key = "{$domain}-{$scope}";
+
+        if (!isset($extractors[$key])) {
+
+            $path = isset(self::$config['scopes'][$scope]['path']) ? self::$config['scopes'][$scope]['path'] : '';
+
+            $extractor = new Extractor\GettextExtractor($domain, $path);
+
+            if (isset(self::$config['scopes'][$scope]['encoding'])) {
+                $extractor->setEncoding(self::$config['scopes'][$scope]['encoding']);
+            } //if
+
+            $extractors[$key] = $extractor;
         } //if
 
-        $path = isset(self::$config['path']) ? self::$config['path'] : '';
-
-        $extractor = new Extractor\GettextExtractor($domain, $path);
-
-        if (isset(self::$config['encoding'])) {
-            $extractor->setEncoding(self::$config['encoding']);
-        } //if
-
-        self::$extractors[$domain] = $extractor;
+        return $extractors[$key];
 
     } // initDomain()
 
